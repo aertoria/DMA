@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+
+  /* VSCode Theme Colors */
+  --vscode-bg: hsl(0, 0%, 11.8%);
+  --vscode-sidebar: hsl(0, 0%, 17.6%);
+  --vscode-panel: hsl(0, 0%, 14.7%);
+  --vscode-border: hsl(0, 0%, 24.3%);
+  --vscode-hover: hsl(0, 0%, 27.1%);
+  --vscode-text: hsl(0, 0%, 80%);
+  --vscode-text-muted: hsl(0, 0%, 58.8%);
+  --vscode-text-bright: hsl(0, 0%, 100%);
+  --vscode-accent: hsl(207, 90%, 54%);
+  --vscode-success: hsl(162, 60%, 40%);
+  --vscode-error: hsl(0, 73%, 56%);
+  --vscode-warning: hsl(38, 95%, 54%);
+}
+
+.dark {
+  --background: hsl(0, 0%, 11.8%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(0, 0%, 14.7%);
+  --muted-foreground: hsl(0, 0%, 58.8%);
+  --popover: hsl(0, 0%, 11.8%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(0, 0%, 11.8%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(0, 0%, 24.3%);
+  --input: hsl(0, 0%, 24.3%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(0, 0%, 14.7%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(0, 0%, 14.7%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(0, 0%, 83.9%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-vscode-bg text-vscode-text;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .font-code {
+    font-family: 'Fira Code', 'Monaco', 'Cascadia Code', monospace;
+  }
+
+  .node-canvas {
+    background-image: radial-gradient(circle, var(--vscode-border) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .resize-handle {
+    cursor: col-resize;
+    user-select: none;
+  }
+
+  .resize-handle:hover {
+    background-color: var(--vscode-accent);
+  }
+
+  /* React Flow customizations */
+  .react-flow__node {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .react-flow__handle {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--vscode-bg);
+  }
+
+  .react-flow__handle-right {
+    right: -6px;
+  }
+
+  .react-flow__handle-left {
+    left: -6px;
+  }
+
+  .react-flow__edge-path {
+    stroke: var(--vscode-accent);
+    stroke-width: 2;
+  }
+
+  .react-flow__arrowhead {
+    fill: var(--vscode-accent);
+  }
+}
+
+/* Custom scrollbar for VSCode theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vscode-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vscode-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vscode-hover);
+}
