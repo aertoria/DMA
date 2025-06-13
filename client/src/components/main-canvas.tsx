@@ -14,7 +14,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Play, Eye, CheckCircle, Mail, FileText, Clock, Webhook, BarChart3, Target } from "lucide-react";
+import { Play, Eye, CheckCircle, Mail, FileText, Clock, Webhook, BarChart3, Target, Split, Send, TrendingUp, Search, Link, Users, MapPin, Code, Map, Mic, Bot, Brain, MessageCircle, Sparkles } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import StartNode from "./flow-nodes/start-node";
@@ -24,6 +24,23 @@ import DelayNode from "./flow-nodes/delay-node";
 import WebhookNode from "./flow-nodes/webhook-node";
 import AnalyticsNode from "./flow-nodes/analytics-node";
 import LeadScoringNode from "./flow-nodes/lead-scoring-node";
+import ABEmailSplitNode from "./flow-nodes/ab-email-split-node";
+import SendEmailNode from "./flow-nodes/send-email-node";
+import EmailAnalyticsNode from "./flow-nodes/email-analytics-node";
+import SEOKeywordResearchNode from "./flow-nodes/seo-keyword-research-node";
+import SEOContentOptimizationNode from "./flow-nodes/seo-content-optimization-node";
+import SEOTechnicalAuditNode from "./flow-nodes/seo-technical-audit-node";
+import SEOBacklinkAnalysisNode from "./flow-nodes/seo-backlink-analysis-node";
+import SEORankTrackingNode from "./flow-nodes/seo-rank-tracking-node";
+import SEOCompetitorAnalysisNode from "./flow-nodes/seo-competitor-analysis-node";
+import SEOLocalSEONode from "./flow-nodes/seo-local-seo-node";
+import SEOSchemaMarkupNode from "./flow-nodes/seo-schema-markup-node";
+import SEOSitemapOptimizationNode from "./flow-nodes/seo-sitemap-optimization-node";
+import SEOVoiceSearchOptimizationNode from "./flow-nodes/seo-voice-search-optimization-node";
+import AEOAIPromptOptimizationNode from "./flow-nodes/aeo-ai-prompt-optimization-node";
+import AEOAgentBehaviorAnalysisNode from "./flow-nodes/aeo-agent-behavior-analysis-node";
+import AEOConversationalOptimizationNode from "./flow-nodes/aeo-conversational-optimization-node";
+import SimulatorPoolNode from "./flow-nodes/simulator-pool-node";
 import type { Campaign } from "@shared/schema";
 
 const nodeTypes = {
@@ -34,6 +51,23 @@ const nodeTypes = {
   webhook: WebhookNode,
   analytics: AnalyticsNode,
   leadScoring: LeadScoringNode,
+  abEmailSplit: ABEmailSplitNode,
+  sendEmail: SendEmailNode,
+  emailAnalytics: EmailAnalyticsNode,
+  seoKeywordResearch: SEOKeywordResearchNode,
+  seoContentOptimization: SEOContentOptimizationNode,
+  seoTechnicalAudit: SEOTechnicalAuditNode,
+  seoBacklinkAnalysis: SEOBacklinkAnalysisNode,
+  seoRankTracking: SEORankTrackingNode,
+  seoCompetitorAnalysis: SEOCompetitorAnalysisNode,
+  seoLocalSEO: SEOLocalSEONode,
+  seoSchemaMarkup: SEOSchemaMarkupNode,
+  seoSitemapOptimization: SEOSitemapOptimizationNode,
+  seoVoiceSearchOptimization: SEOVoiceSearchOptimizationNode,
+  aeoAIPromptOptimization: AEOAIPromptOptimizationNode,
+  aeoAgentBehaviorAnalysis: AEOAgentBehaviorAnalysisNode,
+  aeoConversationalOptimization: AEOConversationalOptimizationNode,
+  simulatorPool: SimulatorPoolNode,
 };
 
 interface MainCanvasProps {
@@ -199,63 +233,249 @@ export default function MainCanvas({ campaignId }: MainCanvasProps) {
         </ReactFlow>
 
         {/* Tool Palette */}
-        <div className="absolute top-4 right-4 bg-vscode-sidebar border border-vscode-border rounded-lg p-3 space-y-2 w-52">
+        <div className="absolute top-4 right-4 bg-vscode-sidebar border border-vscode-border rounded-lg p-3 space-y-3 w-64 max-h-[80vh] overflow-y-auto">
           <div className="text-xs font-medium text-vscode-text-bright mb-2 font-code">Components</div>
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => addNode('email')}
-              className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
-            >
-              <Mail className="w-5 h-5 text-vscode-accent mb-1" />
-              <span className="text-xs">Email</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => addNode('split')}
-              className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
-            >
-              <FileText className="w-5 h-5 text-vscode-warning mb-1" />
-              <span className="text-xs">A/B Split</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => addNode('delay')}
-              className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
-            >
-              <Clock className="w-5 h-5 text-vscode-text-muted mb-1" />
-              <span className="text-xs">Delay</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => addNode('webhook')}
-              className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
-            >
-              <Webhook className="w-5 h-5 text-vscode-text-muted mb-1" />
-              <span className="text-xs">Webhook</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => addNode('analytics')}
-              className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
-            >
-              <BarChart3 className="w-5 h-5 text-purple-500 mb-1" />
-              <span className="text-xs">Analytics</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => addNode('leadScoring')}
-              className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
-            >
-              <Target className="w-5 h-5 text-orange-500 mb-1" />
-              <span className="text-xs">Lead Score</span>
-            </Button>
+          
+          {/* Core Components */}
+          <div className="space-y-2">
+            <div className="text-xs text-vscode-text-muted font-medium">Core</div>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('email')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
+              >
+                <Mail className="w-4 h-4 text-vscode-accent mb-1" />
+                <span className="text-xs">Email</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('split')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
+              >
+                <FileText className="w-4 h-4 text-vscode-warning mb-1" />
+                <span className="text-xs">A/B Split</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('delay')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
+              >
+                <Clock className="w-4 h-4 text-vscode-text-muted mb-1" />
+                <span className="text-xs">Delay</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('webhook')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
+              >
+                <Webhook className="w-4 h-4 text-vscode-text-muted mb-1" />
+                <span className="text-xs">Webhook</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('analytics')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
+              >
+                <BarChart3 className="w-4 h-4 text-purple-500 mb-1" />
+                <span className="text-xs">Analytics</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('leadScoring')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
+              >
+                <Target className="w-4 h-4 text-orange-500 mb-1" />
+                <span className="text-xs">Lead Score</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Email Campaign Section */}
+          <div className="space-y-2">
+            <div className="text-xs text-vscode-text-muted font-medium">Email Campaign</div>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('abEmailSplit')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-blue-500"
+              >
+                <Split className="w-4 h-4 text-blue-500 mb-1" />
+                <span className="text-xs">AB Split</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('sendEmail')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-green-500"
+              >
+                <Send className="w-4 h-4 text-green-500 mb-1" />
+                <span className="text-xs">Send Email</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('emailAnalytics')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-indigo-500"
+              >
+                <TrendingUp className="w-4 h-4 text-indigo-500 mb-1" />
+                <span className="text-xs">Email Analytics</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* SEO Section */}
+          <div className="space-y-2">
+            <div className="text-xs text-vscode-text-muted font-medium">SEO</div>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('seoKeywordResearch')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-yellow-500"
+              >
+                <Search className="w-4 h-4 text-yellow-500 mb-1" />
+                <span className="text-xs">Keywords</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('seoContentOptimization')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-yellow-600"
+              >
+                <FileText className="w-4 h-4 text-yellow-600 mb-1" />
+                <span className="text-xs">Content</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('seoTechnicalAudit')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-yellow-700"
+              >
+                <BarChart3 className="w-4 h-4 text-yellow-700 mb-1" />
+                <span className="text-xs">Tech Audit</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('seoBacklinkAnalysis')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-yellow-500"
+              >
+                <Link className="w-4 h-4 text-yellow-500 mb-1" />
+                <span className="text-xs">Backlinks</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('seoRankTracking')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-orange-500"
+              >
+                <TrendingUp className="w-4 h-4 text-orange-500 mb-1" />
+                <span className="text-xs">Rank Track</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('seoCompetitorAnalysis')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-red-500"
+              >
+                <Users className="w-4 h-4 text-red-500 mb-1" />
+                <span className="text-xs">Competitors</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('seoLocalSEO')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-green-600"
+              >
+                <MapPin className="w-4 h-4 text-green-600 mb-1" />
+                <span className="text-xs">Local SEO</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('seoSchemaMarkup')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-purple-500"
+              >
+                <Code className="w-4 h-4 text-purple-500 mb-1" />
+                <span className="text-xs">Schema</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('seoSitemapOptimization')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-teal-500"
+              >
+                <Map className="w-4 h-4 text-teal-500 mb-1" />
+                <span className="text-xs">Sitemap</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('seoVoiceSearchOptimization')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-pink-500"
+              >
+                <Mic className="w-4 h-4 text-pink-500 mb-1" />
+                <span className="text-xs">Voice Search</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* AEO Section */}
+          <div className="space-y-2">
+            <div className="text-xs text-vscode-text-muted font-medium">AEO (Agent Engine Optimization)</div>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('aeoAIPromptOptimization')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-cyan-500"
+              >
+                <Bot className="w-4 h-4 text-cyan-500 mb-1" />
+                <span className="text-xs">AI Prompts</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('aeoAgentBehaviorAnalysis')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-indigo-600"
+              >
+                <Brain className="w-4 h-4 text-indigo-600 mb-1" />
+                <span className="text-xs">Behavior</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('aeoConversationalOptimization')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-violet-500"
+              >
+                <MessageCircle className="w-4 h-4 text-violet-500 mb-1" />
+                <span className="text-xs">Conversation</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Simulator Pool */}
+          <div className="space-y-2">
+            <div className="text-xs text-vscode-text-muted font-medium">Simulator</div>
+            <div className="grid grid-cols-1 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => addNode('simulatorPool')}
+                className="flex flex-col h-auto py-2 border-vscode-border hover:border-emerald-500"
+              >
+                <Play className="w-4 h-4 text-emerald-500 mb-1" />
+                <span className="text-xs">Campaign Simulator</span>
+              </Button>
+            </div>
           </div>
         </div>
 
