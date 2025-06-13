@@ -50,7 +50,7 @@ export default function CampaignCreationDialog({ onCampaignCreated }: CampaignCr
     mutationFn: async (data: InsertCampaign) => {
       return apiRequest("POST", "/api/campaigns", data);
     },
-    onSuccess: (newCampaign) => {
+    onSuccess: (newCampaign: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
       toast({ title: "Campaign created successfully!" });
       setOpen(false);

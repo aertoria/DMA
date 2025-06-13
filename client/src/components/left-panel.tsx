@@ -76,10 +76,7 @@ export default function LeftPanel({ selectedCampaignId, onSelectCampaign }: Left
 
           {/* New Campaign Button */}
           <div className="p-3 border-b border-vscode-border">
-            <Button className="w-full bg-vscode-accent hover:bg-blue-600 text-white text-sm font-medium">
-              <Plus className="w-4 h-4 mr-2" />
-              New Campaign
-            </Button>
+            <CampaignCreationDialog onCampaignCreated={onSelectCampaign} />
           </div>
 
           {/* Campaign Tree */}
