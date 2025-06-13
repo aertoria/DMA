@@ -147,8 +147,12 @@ export class MemStorage implements IStorage {
   async createCampaign(insertCampaign: InsertCampaign): Promise<Campaign> {
     const id = this.currentCampaignId++;
     const campaign: Campaign = {
-      ...insertCampaign,
       id,
+      name: insertCampaign.name,
+      description: insertCampaign.description || null,
+      status: insertCampaign.status || "draft",
+      flowData: insertCampaign.flowData || null,
+      settings: insertCampaign.settings || null,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -184,8 +188,9 @@ export class MemStorage implements IStorage {
   async createProject(insertProject: InsertProject): Promise<Project> {
     const id = this.currentProjectId++;
     const project: Project = {
-      ...insertProject,
       id,
+      name: insertProject.name,
+      description: insertProject.description || null,
       createdAt: new Date(),
     };
     this.projects.set(id, project);
@@ -216,8 +221,12 @@ export class MemStorage implements IStorage {
   async createCustomer(insertCustomer: InsertCustomer): Promise<Customer> {
     const id = this.currentCustomerId++;
     const customer: Customer = {
-      ...insertCustomer,
       id,
+      email: insertCustomer.email,
+      firstName: insertCustomer.firstName || null,
+      lastName: insertCustomer.lastName || null,
+      tags: insertCustomer.tags || null,
+      metadata: insertCustomer.metadata || null,
       createdAt: new Date(),
     };
     this.customers.set(id, customer);
@@ -248,8 +257,10 @@ export class MemStorage implements IStorage {
   async createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage> {
     const id = this.currentChatMessageId++;
     const message: ChatMessage = {
-      ...insertMessage,
       id,
+      campaignId: insertMessage.campaignId || null,
+      role: insertMessage.role,
+      content: insertMessage.content,
       createdAt: new Date(),
     };
     this.chatMessages.set(id, message);

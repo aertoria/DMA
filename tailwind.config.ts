@@ -61,6 +61,19 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        // VSCode Theme Colors
+        "vscode-bg": "var(--vscode-bg)",
+        "vscode-sidebar": "var(--vscode-sidebar)",
+        "vscode-panel": "var(--vscode-panel)",
+        "vscode-border": "var(--vscode-border)",
+        "vscode-hover": "var(--vscode-hover)",
+        "vscode-text": "var(--vscode-text)",
+        "vscode-text-muted": "var(--vscode-text-muted)",
+        "vscode-text-bright": "var(--vscode-text-bright)",
+        "vscode-accent": "var(--vscode-accent)",
+        "vscode-success": "var(--vscode-success)",
+        "vscode-error": "var(--vscode-error)",
+        "vscode-warning": "var(--vscode-warning)",
       },
       keyframes: {
         "accordion-down": {
