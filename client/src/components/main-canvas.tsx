@@ -14,7 +14,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Play, Eye, CheckCircle, Mail, FileText, Clock, Webhook } from "lucide-react";
+import { Play, Eye, CheckCircle, Mail, FileText, Clock, Webhook, BarChart3, Target } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import StartNode from "./flow-nodes/start-node";
@@ -22,6 +22,8 @@ import EmailNode from "./flow-nodes/email-node";
 import SplitNode from "./flow-nodes/split-node";
 import DelayNode from "./flow-nodes/delay-node";
 import WebhookNode from "./flow-nodes/webhook-node";
+import AnalyticsNode from "./flow-nodes/analytics-node";
+import LeadScoringNode from "./flow-nodes/lead-scoring-node";
 import type { Campaign } from "@shared/schema";
 
 const nodeTypes = {
@@ -30,6 +32,8 @@ const nodeTypes = {
   split: SplitNode,
   delay: DelayNode,
   webhook: WebhookNode,
+  analytics: AnalyticsNode,
+  leadScoring: LeadScoringNode,
 };
 
 interface MainCanvasProps {
@@ -195,7 +199,7 @@ export default function MainCanvas({ campaignId }: MainCanvasProps) {
         </ReactFlow>
 
         {/* Tool Palette */}
-        <div className="absolute top-4 right-4 bg-vscode-sidebar border border-vscode-border rounded-lg p-3 space-y-2 w-48">
+        <div className="absolute top-4 right-4 bg-vscode-sidebar border border-vscode-border rounded-lg p-3 space-y-2 w-52">
           <div className="text-xs font-medium text-vscode-text-bright mb-2 font-code">Components</div>
           <div className="grid grid-cols-2 gap-2">
             <Button
@@ -234,6 +238,24 @@ export default function MainCanvas({ campaignId }: MainCanvasProps) {
               <Webhook className="w-5 h-5 text-vscode-text-muted mb-1" />
               <span className="text-xs">Webhook</span>
             </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => addNode('analytics')}
+              className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
+            >
+              <BarChart3 className="w-5 h-5 text-purple-500 mb-1" />
+              <span className="text-xs">Analytics</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => addNode('leadScoring')}
+              className="flex flex-col h-auto py-2 border-vscode-border hover:border-vscode-accent"
+            >
+              <Target className="w-5 h-5 text-orange-500 mb-1" />
+              <span className="text-xs">Lead Score</span>
+            </Button>
           </div>
         </div>
 
@@ -246,9 +268,15 @@ export default function MainCanvas({ campaignId }: MainCanvasProps) {
               <div className="w-2 h-2 bg-vscode-success rounded-full"></div>
               <span className="text-vscode-text-muted">Valid flow</span>
             </div>
+            {campaign?.settings && typeof campaign.settings === 'object' && (campaign.settings as any).abTestVariants && (
+              <span className="text-vscode-accent">A/B Testing: {(campaign.settings as any).abTestVariants} variants</span>
+            )}
           </div>
           <div className="flex items-center space-x-4">
-            <span className="text-vscode-text-muted">Est. reach: 1,247 contacts</span>
+            {campaign?.settings && typeof campaign.settings === 'object' && (campaign.settings as any).estimatedReach && (
+              <span className="text-vscode-text-muted">Est. reach: {(campaign.settings as any).estimatedReach.toLocaleString()} contacts</span>
+            )}
+            <span className="text-vscode-text-muted">Conv. rate: 12.3%</span>
             <span className="text-vscode-text-muted">Zoom: 100%</span>
           </div>
         </div>

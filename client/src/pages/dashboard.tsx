@@ -5,7 +5,7 @@ import MainCanvas from "@/components/main-canvas";
 import AIChatPanel from "@/components/ai-chat-panel";
 
 export default function Dashboard() {
-  const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null);
+  const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(1);
 
   return (
     <div className="h-screen w-full bg-vscode-bg text-vscode-text overflow-hidden">

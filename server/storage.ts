@@ -68,36 +68,152 @@ export class MemStorage implements IStorage {
   }
 
   private initializeSampleData() {
-    // Sample campaigns
-    const sampleCampaign: Campaign = {
+    // Sophisticated demo campaign
+    const demoCampaign: Campaign = {
       id: this.currentCampaignId++,
-      name: "Email Drip Campaign",
-      description: "Welcome series for new subscribers",
+      name: "Test Campaign",
+      description: "Advanced marketing automation with A/B testing, personalization, and behavioral triggers",
       status: "active",
       flowData: {
         nodes: [
           {
-            id: '1',
+            id: 'start-1',
             type: 'start',
-            position: { x: 100, y: 100 },
-            data: { label: 'Campaign Start' }
+            position: { x: 50, y: 200 },
+            data: { 
+              label: 'Campaign Start',
+              trigger: 'New subscriber signup'
+            }
           },
           {
-            id: '2',
+            id: 'email-1',
             type: 'email',
-            position: { x: 300, y: 100 },
-            data: { label: 'Welcome Email', subject: 'Welcome to DeepMonetizy!' }
+            position: { x: 250, y: 200 },
+            data: { 
+              label: 'Welcome Email',
+              subject: 'Welcome! Your journey starts here 🚀',
+              openRate: '24%'
+            }
+          },
+          {
+            id: 'delay-1',
+            type: 'delay',
+            position: { x: 450, y: 200 },
+            data: { 
+              label: 'Wait Period',
+              duration: '2 days'
+            }
+          },
+          {
+            id: 'split-1',
+            type: 'split',
+            position: { x: 650, y: 200 },
+            data: { 
+              label: 'A/B Test Split',
+              condition: 'Email engagement level'
+            }
+          },
+          {
+            id: 'email-2a',
+            type: 'email',
+            position: { x: 850, y: 100 },
+            data: { 
+              label: 'High Engagement Path',
+              subject: 'Ready for advanced features?',
+              openRate: '31%'
+            }
+          },
+          {
+            id: 'email-2b',
+            type: 'email',
+            position: { x: 850, y: 300 },
+            data: { 
+              label: 'Re-engagement Path',
+              subject: 'We miss you! Here\'s what you\'re missing',
+              openRate: '18%'
+            }
+          },
+          {
+            id: 'delay-2',
+            type: 'delay',
+            position: { x: 1050, y: 100 },
+            data: { 
+              label: 'Follow-up Wait',
+              duration: '1 day'
+            }
+          },
+          {
+            id: 'webhook-1',
+            type: 'webhook',
+            position: { x: 1250, y: 100 },
+            data: { 
+              label: 'CRM Integration',
+              url: 'https://api.salesforce.com/lead-scoring'
+            }
+          },
+          {
+            id: 'email-3',
+            type: 'email',
+            position: { x: 1050, y: 300 },
+            data: { 
+              label: 'Educational Content',
+              subject: 'Master these 5 marketing strategies',
+              openRate: '22%'
+            }
+          },
+          {
+            id: 'analytics-1',
+            type: 'analytics',
+            position: { x: 1250, y: 300 },
+            data: { 
+              label: 'Engagement Tracker',
+              event: 'Email click-through',
+              conversionRate: '15.2%'
+            }
+          },
+          {
+            id: 'leadScoring-1',
+            type: 'leadScoring',
+            position: { x: 1450, y: 100 },
+            data: { 
+              label: 'Lead Qualifier',
+              score: '85/100',
+              criteria: 'Multiple email opens + CTA clicks'
+            }
+          },
+          {
+            id: 'split-2',
+            type: 'split',
+            position: { x: 1650, y: 200 },
+            data: { 
+              label: 'Conversion Split',
+              condition: 'Lead score >= 80'
+            }
           }
         ],
         edges: [
-          { id: 'e1-2', source: '1', target: '2' }
+          { id: 'e1', source: 'start-1', target: 'email-1' },
+          { id: 'e2', source: 'email-1', target: 'delay-1' },
+          { id: 'e3', source: 'delay-1', target: 'split-1' },
+          { id: 'e4a', source: 'split-1', target: 'email-2a', sourceHandle: 'a' },
+          { id: 'e4b', source: 'split-1', target: 'email-2b', sourceHandle: 'b' },
+          { id: 'e5', source: 'email-2a', target: 'delay-2' },
+          { id: 'e6', source: 'delay-2', target: 'webhook-1' },
+          { id: 'e7', source: 'email-2b', target: 'email-3' },
+          { id: 'e8', source: 'webhook-1', target: 'split-2' },
+          { id: 'e9', source: 'email-3', target: 'split-2' }
         ]
       },
-      settings: {},
+      settings: {
+        targetAudience: 'B2B SaaS prospects',
+        goals: ['increase_engagement', 'lead_nurturing', 'conversion_optimization'],
+        abTestVariants: 2,
+        estimatedReach: 5420
+      },
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    this.campaigns.set(sampleCampaign.id, sampleCampaign);
+    this.campaigns.set(demoCampaign.id, demoCampaign);
 
     // Sample project
     const sampleProject: Project = {
