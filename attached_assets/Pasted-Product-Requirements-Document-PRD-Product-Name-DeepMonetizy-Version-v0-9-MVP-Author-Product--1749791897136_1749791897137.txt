@@ -1,0 +1,164 @@
+Product Requirements Document (PRD)
+
+Product Name: DeepMonetizy
+Version: v0.9 (MVP)
+Author: Product Management – Marketing Tech
+Last updated: 12 June 2025
+
+⸻
+
+1. Purpose & Vision
+
+DeepMonetizy is an AI-assisted “Cursor-style” IDE for growth teams. It lets marketers design, run, and iterate A/B (and multivariate) campaigns as visually as developers manipulate code. The goal is to reduce campaign build time from days to minutes, unlock rapid experimentation, and surface data-driven insights automatically.
+
+⸻
+
+2. Objectives & Success Metrics
+
+Objective	KPI (Target @ 90 days post-launch)
+Shrink campaign setup time	↓ 80 % vs. current baseline
+Increase experiment velocity	≥ 5 A/B tests per active workspace / month
+Lift conversion rate on primary CTA	+10 % average over baseline funnels
+User satisfaction (PMF survey)	≥ 60 % “very satisfied”
+Activation (first flow published)	≥ 70 % of new workspaces within 7 days
+
+
+⸻
+
+3. Personas
+
+Persona	Goals	Pain Points Today
+Growth Marketer “Gina”	Launch many experiments without dev help	Dev backlog, tool fragmentation
+Marketing Ops Lead “Omar”	Maintain governance & data integrity	Shadow IT, disconnected data silos
+SMB Founder “Felix”	DIY marketing with limited time	Steep learning curves, no in-house experts
+
+
+⸻
+
+4. High-Level Experience
+
+┌──────────────┬───────────────────────────────┬───────────────┐
+│  Left Panel  │           Mid Panel          │  Right Panel  │
+│ (Navigation) │    Visual Flow / IDE         │   AI Copilot  │
+├──────────────┼───────────────────────────────┼───────────────┤
+│  • Campaigns │  • Node-based canvas         │  • Chat UX    │
+│  • Projects  │    - Drag connectors         │    - Ask for  │
+│  • Onboard   │    - Zoom/mini-map           │      ideas    │
+│  • Customers │  • Inline code editor tabs   │    - Explain  │
+└──────────────┴───────────────────────────────┴───────────────┘
+
+	•	Look & feel: Dark/light themes, monospace UI akin to Cursor / VS Code with sidebars, tabbed editors, and command palette (⌘K).
+	•	Zero-state onboarding: Pre-built “starter’’ flows (email drip, SEO test, Ads split).
+
+⸻
+
+5. Functional Requirements
+
+5.1 Left Panel (Navigation)
+
+Module	FR-ID	Requirement
+Campaign Management	L-1	CRUD campaigns, tag versions, view status badges (Draft / Running / Paused / Archived).
+Project Management	L-2	Group multiple campaigns; Kanban view for backlog → in-progress → done.
+Company Onboarding	L-3	Wizard: company brand settings, SMTP/ESP keys, ad-platform tokens.
+Customer List	L-4	Import (CSV, API, CRM sync), segment builder with filters & real-time counts.
+
+5.2 Mid Panel (Visual Canvas & IDE)
+
+FR-ID	Requirement
+M-1	Node-based drag-and-connect canvas; pan, zoom, snap-to-grid.
+M-2	Core nodes: Email, SEO Experiment, Ad Creative, Webhook, Delay/Wait, Decision Split (A/B/Multivariate).
+M-3	Support inline code in TypeScript/Python for power users; tabs appear above canvas.
+M-4	Version control: diff view, branch & merge, revert.
+M-5	Real-time validation (e.g., missing connector errors, infinite loop detection).
+M-6	“Run” and “Preview” modes with stub data.
+
+5.3 Right Panel (AI Chat Box)
+
+FR-ID	Requirement
+R-1	GPT-4o-powered chat; contextual awareness of selected node and workspace.
+R-2	Commands: “/suggest copy”, “/optimize subject”, “/explain metric”, “/refactor flow”.
+R-3	One-click insertion of AI-generated content into node fields or code tabs.
+R-4	Keeps conversation history per project; searchable.
+
+5.4 Experiment Engine
+
+FR-ID	Requirement
+E-1	Traffic splitter (random, weighted, rule-based).
+E-2	Stats engine (frequentist & Bayesian); minimum sample size alerts.
+E-3	Dashboard: uplift %, p-value, credible intervals, winner auto-promote toggle.
+E-4	Rollback on negative impact thresholds.
+
+5.5 Integrations & APIs
+	•	Email: SendGrid, Amazon SES, Mailgun.
+	•	Ads: Meta, Google Ads, LinkedIn.
+	•	SEO: Publish variant pages via webhook or headless CMS API.
+	•	Analytics: GA4, Mixpanel, Segment.
+	•	Webhooks / REST SDK for custom tools.
+
+⸻
+
+6. Non-Functional Requirements
+
+Category	Requirement
+Performance	<200 ms UI interactions; publish latency <5 s.
+Security	SOC 2 Type II; OAuth 2.0; row-level ACLs by workspace.
+Scalability	10k concurrent active users, 1 B events/month.
+Reliability	99.9 % uptime SLA; auto-scaling worker pool.
+Accessibility	WCAG 2.2 AA.
+Localization	UI strings externalized; support en-US (MVP).
+
+
+⸻
+
+7. MVP Scope (v1)
+
+Included	Deferred
+Email + Decision nodes	Paid Ads node suite
+A/B (2-way) splits	Multivariate (>4 variants)
+Single workspace	Multi-tenant org hierarchy
+GA4 analytics connector	In-app SEO crawler
+Manual override deploy	Auto-promote winners
+
+
+⸻
+
+8. Milestones & Timeline
+
+Date	Milestone
+Week 0 (Today)	PRD sign-off
+Week 2	UX wireframes complete
+Week 5	Alpha (internal) – canvas + email sending
+Week 8	Beta (design partners) – A/B stats engine, AI chat basic
+Week 12	MVP GA – first 20 self-serve customers
+Week 16	Post-launch review & roadmap v2
+
+
+⸻
+
+9. Risks & Mitigations
+
+Risk	Impact	Probability	Mitigation
+Over-engineering canvas	Delays	M	Start with limited node types; usability tests week 5
+Stats engine accuracy	Credibility loss	L	Validate with open-source libraries & data scientists
+Integration sprawl	Maintenance cost	M	Ship SDK & prioritize top 3 ESPs only (MVP)
+GPT hallucinations	Wrong advice	M	System prompts + guardrail filters; human-editable outputs
+
+
+⸻
+
+10. Dependencies / Assumptions
+	•	GPT-4o API quota approved.
+	•	SendGrid sandbox keys for dev.
+	•	Design library based on Tailwind + shadcn/ui.
+	•	Front-end in React/TypeScript; back-end Golang (flow runtime) + Postgres.
+
+⸻
+
+11. Open Questions
+	1.	Will customers require HIPAA / GDPR DPA in MVP?
+	2.	Which pricing metric drives least friction—MAUs, emails sent, or active campaigns?
+	3.	How opinionated should template library be vs. open marketplace?
+
+⸻
+
+Next Step: Stakeholder review meeting on 16 June 2025.
