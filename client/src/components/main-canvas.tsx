@@ -14,7 +14,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Play, Eye, CheckCircle } from "lucide-react";
+import { Play, Eye, CheckCircle, Mail, FileText, Clock, Webhook } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import StartNode from "./flow-nodes/start-node";
@@ -49,7 +49,7 @@ export default function MainCanvas({ campaignId }: MainCanvasProps) {
   });
 
   const updateCampaignMutation = useMutation({
-    mutationFn: async (data: { flowData: any }) => {
+    mutationFn: async (data: { flowData?: any; status?: string }) => {
       if (!campaignId) throw new Error("No campaign selected");
       return apiRequest("PUT", `/api/campaigns/${campaignId}`, data);
     },
@@ -64,9 +64,10 @@ export default function MainCanvas({ campaignId }: MainCanvasProps) {
 
   // Load campaign flow data when campaign changes
   useEffect(() => {
-    if (campaign?.flowData) {
-      setNodes(campaign.flowData.nodes || []);
-      setEdges(campaign.flowData.edges || []);
+    if (campaign?.flowData && typeof campaign.flowData === 'object') {
+      const flowData = campaign.flowData as { nodes?: any[], edges?: any[] };
+      setNodes(flowData.nodes || []);
+      setEdges(flowData.edges || []);
     } else {
       // Default empty flow
       setNodes([]);
@@ -105,7 +106,7 @@ export default function MainCanvas({ campaignId }: MainCanvasProps) {
   const runCampaign = () => {
     if (!campaignId) return;
     
-    // Update campaign status to active
+    // Update campaign status to active and save current flow
     updateCampaignMutation.mutate({ 
       status: "active",
       flowData: { nodes, edges }

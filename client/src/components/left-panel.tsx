@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Plus, Settings, Users } from "lucide-react";
 import CampaignTree from "./campaign-tree";
+import CampaignCreationDialog from "./campaign-creation-dialog";
 import type { Campaign, Project } from "@shared/schema";
 
 interface LeftPanelProps {
@@ -92,19 +93,38 @@ export default function LeftPanel({ selectedCampaignId, onSelectCampaign }: Left
         </TabsContent>
 
         <TabsContent value="projects" className="flex-1 flex flex-col mt-0">
-          <div className="p-3">
-            <div className="text-sm text-vscode-text-muted">
-              Project management features will be implemented in future releases.
+          {/* Search */}
+          <div className="p-3 border-b border-vscode-border">
+            <div className="relative">
+              <Search className="absolute left-3 top-2.5 w-4 h-4 text-vscode-text-muted" />
+              <Input
+                placeholder="Search projects..."
+                className="pl-9 bg-vscode-panel border-vscode-border focus:border-vscode-accent text-sm"
+              />
             </div>
-            {projects.length > 0 && (
-              <div className="mt-4 space-y-2">
-                {projects.map(project => (
-                  <div key={project.id} className="p-2 hover:bg-vscode-hover rounded cursor-pointer">
-                    <div className="text-sm text-vscode-text">{project.name}</div>
-                    <div className="text-xs text-vscode-text-muted">{project.description}</div>
-                  </div>
-                ))}
+          </div>
+
+          {/* New Project Button */}
+          <div className="p-3 border-b border-vscode-border">
+            <Button className="w-full bg-vscode-accent hover:bg-blue-600 text-white text-sm font-medium">
+              <Plus className="w-4 h-4 mr-2" />
+              New Project
+            </Button>
+          </div>
+
+          {/* Projects List */}
+          <div className="flex-1 overflow-y-auto p-2">
+            {projects.length === 0 ? (
+              <div className="text-sm text-vscode-text-muted text-center py-8">
+                No projects found. Create your first project to organize your campaigns.
               </div>
+            ) : (
+              projects.map(project => (
+                <div key={project.id} className="p-2 hover:bg-vscode-hover rounded cursor-pointer mb-2">
+                  <div className="text-sm text-vscode-text">{project.name}</div>
+                  <div className="text-xs text-vscode-text-muted">{project.description}</div>
+                </div>
+              ))
             )}
           </div>
         </TabsContent>
