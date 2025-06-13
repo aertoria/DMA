@@ -79,16 +79,26 @@ export class MemStorage implements IStorage {
           {
             id: 'start-1',
             type: 'start',
-            position: { x: 50, y: 200 },
+            position: { x: 50, y: 400 },
             data: { 
               label: 'Campaign Start',
               trigger: 'New subscriber signup'
             }
           },
           {
+            id: 'analytics-start',
+            type: 'analytics',
+            position: { x: 250, y: 400 },
+            data: { 
+              label: 'Entry Tracking',
+              event: 'Campaign entry',
+              conversionRate: '100%'
+            }
+          },
+          {
             id: 'email-1',
             type: 'email',
-            position: { x: 250, y: 200 },
+            position: { x: 450, y: 400 },
             data: { 
               label: 'Welcome Email',
               subject: 'Welcome! Your journey starts here 🚀',
@@ -98,25 +108,25 @@ export class MemStorage implements IStorage {
           {
             id: 'delay-1',
             type: 'delay',
-            position: { x: 450, y: 200 },
+            position: { x: 650, y: 400 },
             data: { 
-              label: 'Wait Period',
-              duration: '2 days'
+              label: 'Initial Wait',
+              duration: '6 hours'
             }
           },
           {
             id: 'split-1',
             type: 'split',
-            position: { x: 650, y: 200 },
+            position: { x: 850, y: 400 },
             data: { 
-              label: 'A/B Test Split',
-              condition: 'Email engagement level'
+              label: 'Open Rate Split',
+              condition: 'Email opened within 6h'
             }
           },
           {
             id: 'email-2a',
             type: 'email',
-            position: { x: 850, y: 100 },
+            position: { x: 1050, y: 250 },
             data: { 
               label: 'High Engagement Path',
               subject: 'Ready for advanced features?',
@@ -126,35 +136,64 @@ export class MemStorage implements IStorage {
           {
             id: 'email-2b',
             type: 'email',
-            position: { x: 850, y: 300 },
+            position: { x: 1050, y: 550 },
             data: { 
-              label: 'Re-engagement Path',
+              label: 'Re-engagement Sequence',
               subject: 'We miss you! Here\'s what you\'re missing',
               openRate: '18%'
             }
           },
           {
-            id: 'delay-2',
-            type: 'delay',
-            position: { x: 1050, y: 100 },
+            id: 'leadScoring-1',
+            type: 'leadScoring',
+            position: { x: 1250, y: 250 },
             data: { 
-              label: 'Follow-up Wait',
+              label: 'Engagement Scorer',
+              score: '45/100',
+              criteria: 'Email opens + time on page'
+            }
+          },
+          {
+            id: 'delay-2a',
+            type: 'delay',
+            position: { x: 1450, y: 250 },
+            data: { 
+              label: 'Nurture Wait',
+              duration: '2 days'
+            }
+          },
+          {
+            id: 'delay-2b',
+            type: 'delay',
+            position: { x: 1250, y: 550 },
+            data: { 
+              label: 'Re-engagement Wait',
               duration: '1 day'
             }
           },
           {
             id: 'webhook-1',
             type: 'webhook',
-            position: { x: 1250, y: 100 },
+            position: { x: 1650, y: 250 },
             data: { 
-              label: 'CRM Integration',
-              url: 'https://api.salesforce.com/lead-scoring'
+              label: 'CRM Update',
+              url: 'https://api.salesforce.com/leads'
             }
           },
           {
-            id: 'email-3',
+            id: 'email-3a',
             type: 'email',
-            position: { x: 1050, y: 300 },
+            position: { x: 1850, y: 250 },
+            data: { 
+              label: 'Product Demo Invite',
+              subject: 'Ready for a personalized demo?',
+              openRate: '28%'
+            }
+          },
+          {
+            id: 'email-3b',
+            type: 'email',
+            position: { x: 1450, y: 550 },
             data: { 
               label: 'Educational Content',
               subject: 'Master these 5 marketing strategies',
@@ -162,48 +201,146 @@ export class MemStorage implements IStorage {
             }
           },
           {
-            id: 'analytics-1',
+            id: 'analytics-2',
             type: 'analytics',
-            position: { x: 1250, y: 300 },
+            position: { x: 1650, y: 550 },
             data: { 
-              label: 'Engagement Tracker',
-              event: 'Email click-through',
-              conversionRate: '15.2%'
-            }
-          },
-          {
-            id: 'leadScoring-1',
-            type: 'leadScoring',
-            position: { x: 1450, y: 100 },
-            data: { 
-              label: 'Lead Qualifier',
-              score: '85/100',
-              criteria: 'Multiple email opens + CTA clicks'
+              label: 'Content Engagement',
+              event: 'Article read time',
+              conversionRate: '12.8%'
             }
           },
           {
             id: 'split-2',
             type: 'split',
-            position: { x: 1650, y: 200 },
+            position: { x: 2050, y: 250 },
             data: { 
-              label: 'Conversion Split',
-              condition: 'Lead score >= 80'
+              label: 'Demo Interest Split',
+              condition: 'Demo request clicked'
+            }
+          },
+          {
+            id: 'leadScoring-2',
+            type: 'leadScoring',
+            position: { x: 1850, y: 550 },
+            data: { 
+              label: 'Content Engagement Scorer',
+              score: '65/100',
+              criteria: 'Article engagement + email consistency'
+            }
+          },
+          {
+            id: 'webhook-2',
+            type: 'webhook',
+            position: { x: 2250, y: 150 },
+            data: { 
+              label: 'Sales Alert',
+              url: 'https://api.hubspot.com/hot-leads'
+            }
+          },
+          {
+            id: 'email-4a',
+            type: 'email',
+            position: { x: 2450, y: 150 },
+            data: { 
+              label: 'Sales Handoff',
+              subject: 'Your demo is scheduled!',
+              openRate: '42%'
+            }
+          },
+          {
+            id: 'email-4b',
+            type: 'email',
+            position: { x: 2250, y: 350 },
+            data: { 
+              label: 'Demo Follow-up',
+              subject: 'Still interested? Let\'s chat',
+              openRate: '26%'
+            }
+          },
+          {
+            id: 'delay-3',
+            type: 'delay',
+            position: { x: 2050, y: 550 },
+            data: { 
+              label: 'Long-term Nurture',
+              duration: '1 week'
+            }
+          },
+          {
+            id: 'split-3',
+            type: 'split',
+            position: { x: 2250, y: 550 },
+            data: { 
+              label: 'Final Qualification',
+              condition: 'Lead score >= 70'
+            }
+          },
+          {
+            id: 'analytics-3',
+            type: 'analytics',
+            position: { x: 2450, y: 450 },
+            data: { 
+              label: 'Conversion Tracker',
+              event: 'Trial signup',
+              conversionRate: '8.7%'
+            }
+          },
+          {
+            id: 'email-5',
+            type: 'email',
+            position: { x: 2450, y: 650 },
+            data: { 
+              label: 'Long-term Nurture',
+              subject: 'Industry insights & best practices',
+              openRate: '19%'
+            }
+          },
+          {
+            id: 'webhook-3',
+            type: 'webhook',
+            position: { x: 2650, y: 450 },
+            data: { 
+              label: 'Analytics Export',
+              url: 'https://api.mixpanel.com/events'
+            }
+          },
+          {
+            id: 'leadScoring-final',
+            type: 'leadScoring',
+            position: { x: 2650, y: 650 },
+            data: { 
+              label: 'Final Lead Score',
+              score: '92/100',
+              criteria: 'Full campaign engagement'
             }
           }
         ],
         edges: [
-          { id: 'e1', source: 'start-1', target: 'email-1' },
-          { id: 'e2', source: 'email-1', target: 'delay-1' },
-          { id: 'e3', source: 'delay-1', target: 'split-1' },
-          { id: 'e4a', source: 'split-1', target: 'email-2a', sourceHandle: 'a' },
-          { id: 'e4b', source: 'split-1', target: 'email-2b', sourceHandle: 'b' },
-          { id: 'e5', source: 'email-2a', target: 'delay-2' },
-          { id: 'e6', source: 'delay-2', target: 'webhook-1' },
-          { id: 'e7', source: 'email-2b', target: 'email-3' },
-          { id: 'e8', source: 'webhook-1', target: 'leadScoring-1' },
-          { id: 'e9', source: 'email-3', target: 'analytics-1' },
-          { id: 'e10', source: 'analytics-1', target: 'split-2' },
-          { id: 'e11', source: 'leadScoring-1', target: 'split-2' }
+          { id: 'e1', source: 'start-1', target: 'analytics-start' },
+          { id: 'e2', source: 'analytics-start', target: 'email-1' },
+          { id: 'e3', source: 'email-1', target: 'delay-1' },
+          { id: 'e4', source: 'delay-1', target: 'split-1' },
+          { id: 'e5a', source: 'split-1', target: 'email-2a', sourceHandle: 'a' },
+          { id: 'e5b', source: 'split-1', target: 'email-2b', sourceHandle: 'b' },
+          { id: 'e6a', source: 'email-2a', target: 'leadScoring-1' },
+          { id: 'e6b', source: 'email-2b', target: 'delay-2b' },
+          { id: 'e7', source: 'leadScoring-1', target: 'delay-2a' },
+          { id: 'e8', source: 'delay-2a', target: 'webhook-1' },
+          { id: 'e9', source: 'webhook-1', target: 'email-3a' },
+          { id: 'e10', source: 'delay-2b', target: 'email-3b' },
+          { id: 'e11', source: 'email-3b', target: 'analytics-2' },
+          { id: 'e12', source: 'email-3a', target: 'split-2' },
+          { id: 'e13', source: 'analytics-2', target: 'leadScoring-2' },
+          { id: 'e14a', source: 'split-2', target: 'webhook-2', sourceHandle: 'a' },
+          { id: 'e14b', source: 'split-2', target: 'email-4b', sourceHandle: 'b' },
+          { id: 'e15', source: 'webhook-2', target: 'email-4a' },
+          { id: 'e16', source: 'leadScoring-2', target: 'delay-3' },
+          { id: 'e17', source: 'delay-3', target: 'split-3' },
+          { id: 'e18a', source: 'split-3', target: 'analytics-3', sourceHandle: 'a' },
+          { id: 'e18b', source: 'split-3', target: 'email-5', sourceHandle: 'b' },
+          { id: 'e19', source: 'analytics-3', target: 'webhook-3' },
+          { id: 'e20', source: 'email-5', target: 'leadScoring-final' }
         ]
       },
       settings: {
