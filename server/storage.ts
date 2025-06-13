@@ -6,6 +6,8 @@ import {
   type Customer, type InsertCustomer,
   type ChatMessage, type InsertChatMessage
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -39,42 +41,148 @@ export interface IStorage {
   createChatMessage(message: InsertChatMessage): Promise<ChatMessage>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private campaigns: Map<number, Campaign>;
-  private projects: Map<number, Project>;
-  private customers: Map<number, Customer>;
-  private chatMessages: Map<number, ChatMessage>;
-  private currentUserId: number;
-  private currentCampaignId: number;
-  private currentProjectId: number;
-  private currentCustomerId: number;
-  private currentChatMessageId: number;
-
+export class DatabaseStorage implements IStorage {
   constructor() {
-    this.users = new Map();
-    this.campaigns = new Map();
-    this.projects = new Map();
-    this.customers = new Map();
-    this.chatMessages = new Map();
-    this.currentUserId = 1;
-    this.currentCampaignId = 1;
-    this.currentProjectId = 1;
-    this.currentCustomerId = 1;
-    this.currentChatMessageId = 1;
-
-    // Add some initial sample data
-    this.initializeSampleData();
+    // Initialize with sophisticated Test Campaign data
+    this.initializeSampleData().catch(console.error);
   }
 
-  private initializeSampleData() {
-    // Sophisticated demo campaign
-    const demoCampaign: Campaign = {
-      id: this.currentCampaignId++,
-      name: "Test Campaign",
-      description: "Advanced marketing automation with A/B testing, personalization, and behavioral triggers",
-      status: "active",
-      flowData: {
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  async getCampaigns(): Promise<Campaign[]> {
+    return await db.select().from(campaigns);
+  }
+
+  async getCampaign(id: number): Promise<Campaign | undefined> {
+    const [campaign] = await db.select().from(campaigns).where(eq(campaigns.id, id));
+    return campaign || undefined;
+  }
+
+  async createCampaign(insertCampaign: InsertCampaign): Promise<Campaign> {
+    const [campaign] = await db
+      .insert(campaigns)
+      .values(insertCampaign)
+      .returning();
+    return campaign;
+  }
+
+  async updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign | undefined> {
+    const [campaign] = await db
+      .update(campaigns)
+      .set(updates)
+      .where(eq(campaigns.id, id))
+      .returning();
+    return campaign || undefined;
+  }
+
+  async deleteCampaign(id: number): Promise<boolean> {
+    await db.delete(campaigns).where(eq(campaigns.id, id));
+    return true;
+  }
+
+  async getProjects(): Promise<Project[]> {
+    return await db.select().from(projects);
+  }
+
+  async getProject(id: number): Promise<Project | undefined> {
+    const [project] = await db.select().from(projects).where(eq(projects.id, id));
+    return project || undefined;
+  }
+
+  async createProject(insertProject: InsertProject): Promise<Project> {
+    const [project] = await db
+      .insert(projects)
+      .values(insertProject)
+      .returning();
+    return project;
+  }
+
+  async updateProject(id: number, updates: Partial<InsertProject>): Promise<Project | undefined> {
+    const [project] = await db
+      .update(projects)
+      .set(updates)
+      .where(eq(projects.id, id))
+      .returning();
+    return project || undefined;
+  }
+
+  async deleteProject(id: number): Promise<boolean> {
+    await db.delete(projects).where(eq(projects.id, id));
+    return true;
+  }
+
+  async getCustomers(): Promise<Customer[]> {
+    return await db.select().from(customers);
+  }
+
+  async getCustomer(id: number): Promise<Customer | undefined> {
+    const [customer] = await db.select().from(customers).where(eq(customers.id, id));
+    return customer || undefined;
+  }
+
+  async createCustomer(insertCustomer: InsertCustomer): Promise<Customer> {
+    const [customer] = await db
+      .insert(customers)
+      .values(insertCustomer)
+      .returning();
+    return customer;
+  }
+
+  async updateCustomer(id: number, updates: Partial<InsertCustomer>): Promise<Customer | undefined> {
+    const [customer] = await db
+      .update(customers)
+      .set(updates)
+      .where(eq(customers.id, id))
+      .returning();
+    return customer || undefined;
+  }
+
+  async deleteCustomer(id: number): Promise<boolean> {
+    await db.delete(customers).where(eq(customers.id, id));
+    return true;
+  }
+
+  async getChatMessages(campaignId?: number): Promise<ChatMessage[]> {
+    if (campaignId) {
+      return await db.select().from(chatMessages).where(eq(chatMessages.campaignId, campaignId));
+    }
+    return await db.select().from(chatMessages);
+  }
+
+  async createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage> {
+    const [message] = await db
+      .insert(chatMessages)
+      .values(insertMessage)
+      .returning();
+    return message;
+  }
+
+  private async initializeSampleData() {
+    try {
+      // Check if data already exists
+      const existingCampaigns = await db.select().from(campaigns);
+      if (existingCampaigns.length > 0) {
+        return; // Data already initialized
+      }
+
+      // Create sophisticated demo campaign with all 25 components
+      const sophisticatedFlowData = {
         nodes: [
           {
             id: 'start-1',
@@ -342,185 +450,41 @@ export class MemStorage implements IStorage {
           { id: 'e19', source: 'analytics-3', target: 'webhook-3' },
           { id: 'e20', source: 'email-5', target: 'leadScoring-final' }
         ]
-      },
-      settings: {
-        targetAudience: 'B2B SaaS prospects',
-        goals: ['increase_engagement', 'lead_nurturing', 'conversion_optimization'],
-        abTestVariants: 2,
-        estimatedReach: 5420
-      },
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    this.campaigns.set(demoCampaign.id, demoCampaign);
+      };
 
-    // Sample project
-    const sampleProject: Project = {
-      id: this.currentProjectId++,
-      name: "Q1 Marketing Initiative",
-      description: "Email campaigns for Q1 product launch",
-      createdAt: new Date(),
-    };
-    this.projects.set(sampleProject.id, sampleProject);
+      // Insert the sophisticated Test Campaign
+      await db.insert(campaigns).values({
+        name: "Test Campaign",
+        description: "Advanced marketing automation with A/B testing, personalization, and behavioral triggers",
+        status: "active",
+        flowData: sophisticatedFlowData,
+        settings: {
+          targetAudience: 'B2B SaaS prospects',
+          goals: ['increase_engagement', 'lead_nurturing', 'conversion_optimization'],
+          estimatedReach: 5420,
+          abTestVariants: 3
+        }
+      });
 
-    // Sample customers
-    const sampleCustomer: Customer = {
-      id: this.currentCustomerId++,
-      email: "user@example.com",
-      firstName: "John",
-      lastName: "Doe",
-      tags: ["new_subscriber"],
-      metadata: {},
-      createdAt: new Date(),
-    };
-    this.customers.set(sampleCustomer.id, sampleCustomer);
-  }
+      // Insert sample project
+      await db.insert(projects).values({
+        name: "Q1 Marketing Initiative",
+        description: "Comprehensive marketing automation campaign for Q1 2024 with advanced targeting and personalization",
+        status: "active"
+      });
 
-  async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
-  }
+      // Insert sample customer
+      await db.insert(customers).values({
+        name: "Enterprise Customer",
+        email: "contact@enterprise.com",
+        status: "active",
+        tags: ["enterprise", "high-value", "technology"]
+      });
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(user => user.username === username);
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
-  }
-
-  async getCampaigns(): Promise<Campaign[]> {
-    return Array.from(this.campaigns.values());
-  }
-
-  async getCampaign(id: number): Promise<Campaign | undefined> {
-    return this.campaigns.get(id);
-  }
-
-  async createCampaign(insertCampaign: InsertCampaign): Promise<Campaign> {
-    const id = this.currentCampaignId++;
-    const campaign: Campaign = {
-      id,
-      name: insertCampaign.name,
-      description: insertCampaign.description || null,
-      status: insertCampaign.status || "draft",
-      flowData: insertCampaign.flowData || null,
-      settings: insertCampaign.settings || null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    this.campaigns.set(id, campaign);
-    return campaign;
-  }
-
-  async updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign | undefined> {
-    const campaign = this.campaigns.get(id);
-    if (!campaign) return undefined;
-
-    const updatedCampaign: Campaign = {
-      ...campaign,
-      ...updates,
-      updatedAt: new Date(),
-    };
-    this.campaigns.set(id, updatedCampaign);
-    return updatedCampaign;
-  }
-
-  async deleteCampaign(id: number): Promise<boolean> {
-    return this.campaigns.delete(id);
-  }
-
-  async getProjects(): Promise<Project[]> {
-    return Array.from(this.projects.values());
-  }
-
-  async getProject(id: number): Promise<Project | undefined> {
-    return this.projects.get(id);
-  }
-
-  async createProject(insertProject: InsertProject): Promise<Project> {
-    const id = this.currentProjectId++;
-    const project: Project = {
-      id,
-      name: insertProject.name,
-      description: insertProject.description || null,
-      createdAt: new Date(),
-    };
-    this.projects.set(id, project);
-    return project;
-  }
-
-  async updateProject(id: number, updates: Partial<InsertProject>): Promise<Project | undefined> {
-    const project = this.projects.get(id);
-    if (!project) return undefined;
-
-    const updatedProject: Project = { ...project, ...updates };
-    this.projects.set(id, updatedProject);
-    return updatedProject;
-  }
-
-  async deleteProject(id: number): Promise<boolean> {
-    return this.projects.delete(id);
-  }
-
-  async getCustomers(): Promise<Customer[]> {
-    return Array.from(this.customers.values());
-  }
-
-  async getCustomer(id: number): Promise<Customer | undefined> {
-    return this.customers.get(id);
-  }
-
-  async createCustomer(insertCustomer: InsertCustomer): Promise<Customer> {
-    const id = this.currentCustomerId++;
-    const customer: Customer = {
-      id,
-      email: insertCustomer.email,
-      firstName: insertCustomer.firstName || null,
-      lastName: insertCustomer.lastName || null,
-      tags: insertCustomer.tags || null,
-      metadata: insertCustomer.metadata || null,
-      createdAt: new Date(),
-    };
-    this.customers.set(id, customer);
-    return customer;
-  }
-
-  async updateCustomer(id: number, updates: Partial<InsertCustomer>): Promise<Customer | undefined> {
-    const customer = this.customers.get(id);
-    if (!customer) return undefined;
-
-    const updatedCustomer: Customer = { ...customer, ...updates };
-    this.customers.set(id, updatedCustomer);
-    return updatedCustomer;
-  }
-
-  async deleteCustomer(id: number): Promise<boolean> {
-    return this.customers.delete(id);
-  }
-
-  async getChatMessages(campaignId?: number): Promise<ChatMessage[]> {
-    const messages = Array.from(this.chatMessages.values());
-    if (campaignId !== undefined) {
-      return messages.filter(msg => msg.campaignId === campaignId);
+    } catch (error) {
+      console.error('Error initializing sample data:', error);
     }
-    return messages;
-  }
-
-  async createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage> {
-    const id = this.currentChatMessageId++;
-    const message: ChatMessage = {
-      id,
-      campaignId: insertMessage.campaignId || null,
-      role: insertMessage.role,
-      content: insertMessage.content,
-      createdAt: new Date(),
-    };
-    this.chatMessages.set(id, message);
-    return message;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
