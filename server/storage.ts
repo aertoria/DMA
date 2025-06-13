@@ -200,8 +200,10 @@ export class MemStorage implements IStorage {
           { id: 'e5', source: 'email-2a', target: 'delay-2' },
           { id: 'e6', source: 'delay-2', target: 'webhook-1' },
           { id: 'e7', source: 'email-2b', target: 'email-3' },
-          { id: 'e8', source: 'webhook-1', target: 'split-2' },
-          { id: 'e9', source: 'email-3', target: 'split-2' }
+          { id: 'e8', source: 'webhook-1', target: 'leadScoring-1' },
+          { id: 'e9', source: 'email-3', target: 'analytics-1' },
+          { id: 'e10', source: 'analytics-1', target: 'split-2' },
+          { id: 'e11', source: 'leadScoring-1', target: 'split-2' }
         ]
       },
       settings: {
