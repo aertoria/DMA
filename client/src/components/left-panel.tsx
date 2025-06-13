@@ -36,13 +36,12 @@ export default function LeftPanel({ selectedCampaignId, onSelectCampaign }: Left
           <div className="w-6 h-6 bg-vscode-accent rounded flex items-center justify-center">
             <span className="text-white text-xs font-bold font-code">D</span>
           </div>
-          <span className="font-code text-sm font-medium text-vscode-text-bright">DeepMonetizy</span>
+          <span className="font-code text-sm font-medium text-vscode-text-bright">DeepInsight by Monetizy.ai</span>
         </div>
         <Button variant="ghost" size="sm" className="text-vscode-text hover:bg-vscode-hover">
           <Settings className="w-4 h-4" />
         </Button>
       </div>
-
       {/* Tabs */}
       <Tabs defaultValue="campaigns" className="flex-1 flex flex-col">
         <TabsList className="grid w-full grid-cols-2 bg-vscode-bg border-b border-vscode-border rounded-none">
@@ -126,7 +125,6 @@ export default function LeftPanel({ selectedCampaignId, onSelectCampaign }: Left
           </div>
         </TabsContent>
       </Tabs>
-
       {/* Bottom Actions */}
       <div className="border-t border-vscode-border p-3 space-y-2">
         <Button 
